@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper">
+
+	<!-- result 형식 -->
+	<resultMap type="map" id="mapList">
+		<result column="SEQ" property="seq"/>
+		<result column="MEM_NAME" property="memName"/>
+		<result column="MEM_ID" property="memId"/>
+		<result column="BOARD_SUBJECT" property="boardSubject"/>
+		<result column="BOARD_CONTENT" property="boardContent"/>
+		<result column="REG_DATE" property="regDate"/>
+		<result column="UPT_DATE" property="uptDate"/>
+		<result column="VIEW_CNT" property="viewCnt"/>
+	</resultMap>
+	
+	<!-- sql 형식 -->
+	<select id="readByRow" parameterType="map" resultMap="mapList">
+		SELECT
+			SEQ
+		    ,MEM_NAME
+		    ,MEM_ID
+		    ,BOARD_SUBJECT
+		    ,BOARD_CONTENT
+		    ,REG_DATE
+		    ,UPT_DATE
+		    ,VIEW_CNT
+		FROM BOARD_STUDY
+		WHERE SEQ = #{seq}
+	</select>
+	
+
+	<select id="list" resultMap="mapList">
+		select
+			rnum
+			,SEQ
+			,MEM_NAME
+			,MEM_ID
+			,BOARD_SUBJECT
+			,BOARD_CONTENT
+			,REG_DATE
+			,UPT_DATE
+			,VIEW_CNT
+		from (
+			select
+				row_number() over(order by seq desc) rnum
+				,SEQ
+				,MEM_NAME
+				,MEM_ID
+				,BOARD_SUBJECT
+				,BOARD_CONTENT
+				,REG_DATE
+				,UPT_DATE
+				,VIEW_CNT
+			from board_study
+			where 1=1
+				<choose>
+					<when test="choose == 'name'">
+						and mem_name like '%' || #{searchTxt} || '%'
+					</when>
+					<when test="choose == 'subject'">
+						and BOARD_SUBJECT like '%' || #{searchTxt} || '%'
+					</when>
+					<when test="choose == 'subCont'">
+						and (BOARD_SUBJECT like '%' || #{searchTxt} || '%'
+						or BOARD_CONTENT like '%' || #{searchTxt} || '%')
+					</when>
+				</choose>
+				<if test="cal1 != null and cal1 != ''">
+					and to_char(reg_date, 'yyyy-MM-dd') between #{cal1}  and #{cal2}
+				</if>
+			) where rnum between ${pageBegin} and ${pageEnd}
+	</select>
+	
+	<select id="pageMap" parameterType="map" resultType="integer">
+		select count(seq)
+		from BOARD_STUDY
+		where 1=1
+			<choose>
+				<when test="choose == 'name'">
+					and mem_name like '%' || #{searchTxt} || '%'
+				</when>
+				<when test="choose == 'subject'">
+					and BOARD_SUBJECT like '%' || #{searchTxt} || '%'
+				</when>
+				<when test="choose == 'subCont'">
+					and (BOARD_SUBJECT like '%' || #{searchTxt} || '%'
+					or BOARD_CONTENT like '%' || #{searchTxt} || '%')
+				</when>
+			</choose>
+			<if test="cal1 != null and cal1 != ''">
+				and to_char(reg_date, 'yyyy-MM-dd') between #{cal1}  and #{cal2}
+			</if>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO BOARD_STUDY (
+			SEQ
+			,MEM_NAME
+			,MEM_ID
+			,BOARD_SUBJECT
+			,BOARD_CONTENT
+			,REG_DATE
+			,VIEW_CNT
+		) VALUES (
+			(SELECT NVL(max(SEQ) + 1, 0) FROM BOARD_STUDY)
+			,#{writer}
+			,#{id}
+			,#{title}
+			,#{text}
+			,SYSDATE
+			,0)
+	</insert>
+	
+	<update id="updateRow" parameterType="map">
+		UPDATE 
+			BOARD_STUDY
+		SET
+			MEM_NAME = #{writer}
+		    ,MEM_ID = #{id}
+		    ,BOARD_SUBJECT = #{title}
+		    ,BOARD_CONTENT = #{text}
+		    ,UPT_DATE = SYSDATE
+		WHERE SEQ = #{seq}
+	</update>
+	
+	<update id="viewUpdate" parameterType="integer">
+		UPDATE 
+			BOARD_STUDY
+		SET VIEW_CNT = VIEW_CNT + 1
+		WHERE SEQ =	#{seq}
+	</update>
+	
+	<delete id="delete" parameterType="integer">
+		DELETE FROM BOARD_STUDY
+		WHERE SEQ IN
+		<foreach collection="list" separator="," open="(" close=")" item="checkedList">
+			#{checkedList}
+		</foreach>
+	</delete>
+</mapper>
