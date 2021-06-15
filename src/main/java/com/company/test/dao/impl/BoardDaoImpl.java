@@ -10,7 +10,6 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.company.test.dao.BoardDao;
-import com.company.test.vo.Criteria;
 
 @Repository("dao")
 public class BoardDaoImpl implements BoardDao {

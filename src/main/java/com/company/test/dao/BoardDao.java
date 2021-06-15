@@ -6,7 +6,6 @@ import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
-import com.company.test.vo.Criteria;
 
 @Repository("dao")
 public interface BoardDao {

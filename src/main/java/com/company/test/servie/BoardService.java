@@ -3,7 +3,6 @@ package com.company.test.servie;
 import java.util.List;
 import java.util.Map;
 
-import com.company.test.vo.Criteria;
 
 public interface BoardService {
 

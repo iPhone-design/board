@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import com.company.test.dao.BoardDao;
 import com.company.test.servie.BoardService;
-import com.company.test.vo.Criteria;
 
 @Service("service")
 public class BoardServiceImpl implements BoardService {

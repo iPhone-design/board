@@ -10,14 +10,10 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.company.test.servie.BoardService;
-import com.company.test.vo.Criteria;
-import com.company.test.vo.PageMaker;
 
 @Controller
 public class BoardController {
