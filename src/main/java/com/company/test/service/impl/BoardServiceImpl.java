@@ -29,7 +29,7 @@ public class BoardServiceImpl implements BoardService {
 			pageScale = Integer.parseInt(map.get("pageScale").toString()) ;
 		}
 		
-		int pageBegin = (curPage-1) * pageScale + 1;
+		int pageBegin = (curPage - 1) * pageScale + 1;
 		int pageEnd = pageBegin+pageScale - 1;
 		
 		map.put("pageBegin", pageBegin);
@@ -49,7 +49,7 @@ public class BoardServiceImpl implements BoardService {
 		int curPage = map.get("curPage") == null ? 1 : Integer.parseInt(map.get("curPage").toString());
 		
 		int totPage = (int) Math.ceil(count * 1.0 / PAGE_SCALE);
-        
+		
         int totBlock = (int) Math.ceil(totPage / BLOCK_SCALE);
         
 		 // *현재 페이지가 몇번째 페이지 블록에 속하는지 계산
@@ -82,7 +82,6 @@ public class BoardServiceImpl implements BoardService {
         pageMap.put("totBlock", totBlock);
         pageMap.put("nextPage", nextPage);
         pageMap.put("totPage", totPage);
-		
 		return pageMap;
 	}
 
@@ -109,6 +108,31 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public int delete(List<Integer> checkedList) {
 		return boardDao.delete(checkedList);
+	}
+
+	@Override
+	public int upload(Map<String, Object> uploadMap) {
+		return boardDao.upload(uploadMap);
+	}
+
+	@Override
+	public int seq() {
+		return boardDao.seq();
+	}
+
+	@Override
+	public List<Map<String, Object>> readByFile(int seq) {
+		return boardDao.readByFile(seq);
+	}
+
+	@Override
+	public Map<String, Object> selectFileInfo(int seq) {
+		return boardDao.selectFileInfo(seq);
+	}
+
+	@Override
+	public List<Map<String, Object>> excel() {
+		return boardDao.excel();
 	}
 
 }

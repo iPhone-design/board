@@ -50,5 +50,30 @@ public class BoardDaoImpl implements BoardDao {
 	public int pageMap(Map<String, Object> map) {
 		return sqlSessionTemplate.selectOne("mapper.pageMap", map);
 	}
+
+	@Override
+	public int upload(Map<String, Object> uploadMap) {
+		return sqlSessionTemplate.insert("mapper.upload", uploadMap);
+	}
+
+	@Override
+	public int seq() {
+		return sqlSessionTemplate.selectOne("mapper.seq");
+	}
+
+	@Override
+	public List<Map<String, Object>> readByFile(int seq) {
+		return sqlSessionTemplate.selectList("mapper.readByFile", seq);
+	}
+
+	@Override
+	public Map<String, Object> selectFileInfo(int seq) {
+		return sqlSessionTemplate.selectOne("mapper.selectFileInfo", seq);
+	}
+
+	@Override
+	public List<Map<String, Object>> excel() {
+		return sqlSessionTemplate.selectList("mapper.excel");
+	}
 	
 }

@@ -24,4 +24,14 @@ public interface BoardDao {
 
 	int pageMap(Map<String, Object> map);
 
+	int upload(Map<String, Object> uploadMap);
+
+	int seq();
+
+	List<Map<String, Object>> readByFile(int seq);
+
+	Map<String, Object> selectFileInfo(int seq);
+
+	List<Map<String, Object>> excel();
+
 }

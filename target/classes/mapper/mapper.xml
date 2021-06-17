@@ -12,6 +12,11 @@
 		<result column="REG_DATE" property="regDate"/>
 		<result column="UPT_DATE" property="uptDate"/>
 		<result column="VIEW_CNT" property="viewCnt"/>
+		<result column="FILE_SEQ" property="fileSeq"/>
+		<result column="REAL_NAME" property="realName"/>
+		<result column="SAVE_NAME" property="saveName"/>
+		<result column="SAVE_PATH" property="savePath"/>
+		<result column="LIST_SEQ" property="listSeq"/>
 	</resultMap>
 	
 	<!-- sql 형식 -->
@@ -72,6 +77,7 @@
 			) where rnum between ${pageBegin} and ${pageEnd}
 	</select>
 	
+	
 	<select id="pageMap" parameterType="map" resultType="integer">
 		select count(seq)
 		from BOARD_STUDY
@@ -103,7 +109,7 @@
 			,REG_DATE
 			,VIEW_CNT
 		) VALUES (
-			(SELECT NVL(max(SEQ) + 1, 0) FROM BOARD_STUDY)
+			#{seq}
 			,#{writer}
 			,#{id}
 			,#{title}
@@ -138,4 +144,53 @@
 			#{checkedList}
 		</foreach>
 	</delete>
+	
+	<select id="seq" resultType="integer">
+		SELECT NVL(max(seq), 0) + 1 
+		FROM board_study
+	</select>
+	
+	<insert id="upload" parameterType="map">
+		insert into file_study_table (
+	                FILE_SEQ
+	                ,REAL_NAME
+	                ,SAVE_NAME
+	                ,REG_DATE
+	                ,SAVE_PATH
+	                ,LIST_SEQ
+				) values (
+	                (SELECT NVL(max(FILE_SEQ), 0) + 1 FROM file_study_table)
+					,#{realName}
+					,#{saveName}
+					,SYSDATE
+	                ,#{savePath}
+					,#{seq}
+				)
+	</insert>
+	
+	<select id="readByFile" parameterType="integer" resultMap="mapList">
+		SELECT
+		 	FILE_SEQ
+	        ,REAL_NAME
+	        ,SAVE_NAME
+	        ,REG_DATE
+	        ,SAVE_PATH
+	        ,LIST_SEQ
+	    FROM file_study_table
+	    WHERE LIST_SEQ = #{seq}
+	</select>
+	
+	<select id="excel" resultType="map" resultMap="mapList">
+		SELECT
+			SEQ
+			,MEM_NAME
+			,MEM_ID
+			,BOARD_SUBJECT
+			,BOARD_CONTENT
+			,REG_DATE
+			,UPT_DATE
+			,VIEW_CNT
+		FROM BOARD_STUDY
+		ORDER BY SEQ
+	</select>
 </mapper>
