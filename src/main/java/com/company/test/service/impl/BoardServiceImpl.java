@@ -131,8 +131,8 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public List<Map<String, Object>> excel() {
-		return boardDao.excel();
+	public List<Map<String, Object>> excel(Map<String, Object> map) {
+		return boardDao.excel(map);
 	}
 
 }

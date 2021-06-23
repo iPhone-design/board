@@ -12,7 +12,6 @@
 		var i = 0;
 		$("#reg").click(function () {
 			$("#frm").attr("action", "insert").attr("method", "post").submit();
-// 			$("#frmUpload").attr("action", "insert").attr("method", "post").submit();
 		})
 		
 		$("#updateRow").click(function () {
@@ -84,14 +83,12 @@
 			<c:choose>
 				<c:when test="${empty fileList}">
 					<input type="button" name="fileUpload" id="fileUpload" value="파일추가">
-					<input type="file" name="fileUp" id="fileUp" multiple="multiple" value="다중업로드">
 				</c:when>
 				<c:otherwise>
 					<div>
 						<c:forEach items="${fileList}" var="file" varStatus="i">
-							<a href="downLoad?saveName=${file.saveName}&realName=${file.realName}">
-								<img src="${pageContext.request.contextPath}/resources/image/${file.saveName}" width="300" height="200">
-							</a><br>
+							<img src="${pageContext.request.contextPath}/resources/image/${file.saveName}" width="300" height="200">
+							<a href="downLoad?saveName=${file.saveName}&realName=${file.realName}">${file.realName}</a><br>
 						</c:forEach>
 					</div>
 				</c:otherwise>

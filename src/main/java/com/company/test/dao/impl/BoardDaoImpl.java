@@ -72,8 +72,8 @@ public class BoardDaoImpl implements BoardDao {
 	}
 
 	@Override
-	public List<Map<String, Object>> excel() {
-		return sqlSessionTemplate.selectList("mapper.excel");
+	public List<Map<String, Object>> excel(Map<String, Object> map) {
+		return sqlSessionTemplate.selectList("mapper.excel", map);
 	}
 	
 }

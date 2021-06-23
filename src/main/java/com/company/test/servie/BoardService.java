@@ -28,6 +28,6 @@ public interface BoardService {
 
 	Map<String, Object> selectFileInfo(int seq);
 
-	List<Map<String, Object>> excel();
+	List<Map<String, Object>> excel(Map<String, Object> map);
 
 }
