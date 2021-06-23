@@ -180,7 +180,7 @@
 	    WHERE LIST_SEQ = #{seq}
 	</select>
 	
-	<select id="excel" resultType="map" resultMap="mapList">
+	<select id="excel" parameterType="map" resultType="map" resultMap="mapList">
 		SELECT
 			SEQ
 			,MEM_NAME
@@ -191,6 +191,22 @@
 			,UPT_DATE
 			,VIEW_CNT
 		FROM BOARD_STUDY
+		WHERE 1 = 1
+		<choose>
+			<when test="choose == 'name'">
+				and mem_name like '%' || #{searchTxt} || '%'
+			</when>
+			<when test="choose == 'subject'">
+				and BOARD_SUBJECT like '%' || #{searchTxt} || '%'
+			</when>
+			<when test="choose == 'subCont'">
+				and (BOARD_SUBJECT like '%' || #{searchTxt} || '%'
+				or BOARD_CONTENT like '%' || #{searchTxt} || '%')
+			</when>
+		</choose>
+		<if test="cal1 != null and cal1 != ''">
+			and to_char(reg_date, 'yyyy-MM-dd') between #{cal1}  and #{cal2}
+		</if>
 		ORDER BY SEQ
 	</select>
 </mapper>
